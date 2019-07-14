@@ -15,22 +15,26 @@ class MainPageState extends State<MainPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children : <Widget> [ 
-            MaskedTextField
-            (
-                maskedTextFieldController: myController,
-                mask: "+(xxx) xxx-xxx-xx-xx",
-                maxLength: 21,
-                keyboardType: TextInputType.number,
-                inputDecoration: InputDecoration(
-                    hintText: "Write you Telephone Number", 
-                    labelText: "Telephone",
-                    border: OutlineInputBorder(
-                      gapPadding: 0.0,
-                      borderRadius: BorderRadius.circular(1.5)
-                    )
-                  ),
+            SizedBox (
+              width: screenSize.width,
+              child: MaskedTextField (
+                  maskedTextFieldController: myController,
+                  mask: "(xxx) xxx-xxx-xx-xx",
+                  maxLength: 19,
+                  keyboardType: TextInputType.number,
+                  inputDecoration: InputDecoration(
+                      hintText: "Write you Telephone Number", 
+                      labelText: "Telephone",
+                      border: OutlineInputBorder(
+                        gapPadding: 0.0,
+                        borderRadius: BorderRadius.circular(1.5)
+                      )
+                    ),
+              ),
             ),
-            TextFormField(
+            SizedBox (
+              width: screenSize.width,
+              child: TextFormField(
                 obscureText: true, // Use secure text for passwords.
                 decoration: new InputDecoration(
                   hintText: 'Password',
@@ -40,12 +44,13 @@ class MainPageState extends State<MainPage> {
                     borderRadius: BorderRadius.circular(1.5)
                   )
                 )
+              )
             ),
             Container(
                 width: screenSize.width,
                 child: new RaisedButton(
                   child: new Text(
-                    'Login',
+                    'Save',
                     style: new TextStyle(
                       color: Colors.white
                     ),
