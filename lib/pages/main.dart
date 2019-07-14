@@ -1,6 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:masked_text/masked_text.dart';
 
+enum ConfirmAction { CANCEL, ACCEPT }
+Future<ConfirmAction> _asyncConfirmDialog(BuildContext context) async {
+  return showDialog<ConfirmAction>(
+    context: context,
+    barrierDismissible: false, // user must tap button for close dialog!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Data is correct?'),
+        content: const Text(
+            'You can change this setting on options section.'),
+        actions: <Widget>[
+          FlatButton(
+            child: const Text('CANCEL'),
+            onPressed: () {
+              Navigator.of(context).pop(ConfirmAction.CANCEL);
+            },
+          ),
+          FlatButton(
+            child: const Text('ACCEPT'),
+            onPressed: () {
+              Navigator.of(context).pop(ConfirmAction.ACCEPT);
+            },
+          )
+        ],
+      );
+    },
+  );
+}
+
 class MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
@@ -9,7 +38,7 @@ class MainPageState extends State<MainPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Input data'),
+        title: Text('Initializate data'),
       ),
       body: Center(
         child: Column(
@@ -55,17 +84,20 @@ class MainPageState extends State<MainPage> {
                       color: Colors.white
                     ),
                   ),
-                  onPressed: () => null,
+                  onPressed: () async {
+                      print("Presseed buttoonn");
+                      final ConfirmAction action = await _asyncConfirmDialog(context);
+                  },
                   color: Colors.blue,
                 ),
                 margin: new EdgeInsets.only(
                   top: 20.0
                 ),
-              )
+               )
           ]
         ),
-    ),
-  );
+      ),
+    );
   }
 }
 
