@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:masked_text/masked_text.dart';
+import 'package:sms_alarm_flutter/effects/scale_transition.dart';
+import 'package:sms_alarm_flutter/pages/sms_commands.dart';
 
 TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 
@@ -46,8 +48,13 @@ class MainPageState extends State<MainPage> {
             minWidth: MediaQuery.of(context).size.width,
             padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
             onPressed: () async {
-              print("Presseed buttoonn");
               final ConfirmAction action = await _asyncConfirmDialog(context);
+
+              if (action == ConfirmAction.ACCEPT) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => SmsCommandPage()));
+              }
             },
             child: Text("Save",
                 textAlign: TextAlign.center,

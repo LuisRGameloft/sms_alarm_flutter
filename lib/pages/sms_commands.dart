@@ -35,8 +35,6 @@ class SmsCommandState extends State<SmsCommandPage> {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size / 2;
-    final myController = TextEditingController();
-
     final saveButton = Material(
           elevation: 5.0,
           borderRadius: BorderRadius.circular(30.0),
