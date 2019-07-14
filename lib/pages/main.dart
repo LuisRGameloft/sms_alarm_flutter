@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:masked_text/masked_text.dart';
 
+TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+
 enum ConfirmAction { CANCEL, ACCEPT }
 Future<ConfirmAction> _asyncConfirmDialog(BuildContext context) async {
   return showDialog<ConfirmAction>(
@@ -36,6 +38,24 @@ class MainPageState extends State<MainPage> {
     final Size screenSize = MediaQuery.of(context).size / 2;
     final myController = TextEditingController();
 
+    final saveButton = Material(
+          elevation: 5.0,
+          borderRadius: BorderRadius.circular(30.0),
+          color: Color(0xff01A0C7),
+          child: MaterialButton(
+            minWidth: MediaQuery.of(context).size.width,
+            padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+            onPressed: () async {
+              print("Presseed buttoonn");
+              final ConfirmAction action = await _asyncConfirmDialog(context);
+            },
+            child: Text("Save",
+                textAlign: TextAlign.center,
+                style: style.copyWith(
+                    color: Colors.white, fontWeight: FontWeight.bold)),
+          ),
+        );
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Initializate data'),
@@ -54,11 +74,11 @@ class MainPageState extends State<MainPage> {
                   inputDecoration: InputDecoration(
                       hintText: "Write you Telephone Number", 
                       labelText: "Telephone",
-                      border: OutlineInputBorder(
-                        gapPadding: 0.0,
-                        borderRadius: BorderRadius.circular(1.5)
+                      contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                      border: OutlineInputBorder (
+                        borderRadius: BorderRadius.circular(32.0)
                       )
-                    ),
+                  ),
               ),
             ),
             SizedBox (
@@ -68,32 +88,17 @@ class MainPageState extends State<MainPage> {
                 decoration: new InputDecoration(
                   hintText: 'Password',
                   labelText: 'Enter your password',
+                  contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                   border: OutlineInputBorder(
-                    gapPadding: 0.0,
-                    borderRadius: BorderRadius.circular(1.5)
+                    borderRadius: BorderRadius.circular(32.0)
                   )
                 )
               )
             ),
             Container(
                 width: screenSize.width,
-                child: new RaisedButton(
-                  child: new Text(
-                    'Save',
-                    style: new TextStyle(
-                      color: Colors.white
-                    ),
-                  ),
-                  onPressed: () async {
-                      print("Presseed buttoonn");
-                      final ConfirmAction action = await _asyncConfirmDialog(context);
-                  },
-                  color: Colors.blue,
-                ),
-                margin: new EdgeInsets.only(
-                  top: 20.0
-                ),
-               )
+                child: saveButton
+            )
           ]
         ),
       ),
