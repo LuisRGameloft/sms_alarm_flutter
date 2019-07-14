@@ -35,49 +35,52 @@ class SmsCommandState extends State<SmsCommandPage> {
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size / 2;
-    final saveButton = Material(
-          elevation: 5.0,
-          borderRadius: BorderRadius.circular(30.0),
-          color: Color(0xff01A0C7),
-          child: MaterialButton(
-            minWidth: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-            onPressed: () async {
-              print("Presseed buttoonn");
-              final ConfirmAction action = await _asyncConfirmDialog(context);
-            },
-            child: Text("Save",
-                textAlign: TextAlign.center,
-                style: style.copyWith(
-                    color: Colors.white, fontWeight: FontWeight.bold)),
-          ),
-        );
-
+    
     return Scaffold(
       appBar: AppBar(
-        title: Text('Initializate data'),
+        title: Text('Activate Alarm'),
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children : <Widget> [ 
-            SizedBox (
-              width: screenSize.width,
-              child: TextFormField(
-                obscureText: true, // Use secure text for passwords.
-                decoration: new InputDecoration(
-                  hintText: 'Password',
-                  labelText: 'Enter your password',
-                  contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(32.0)
-                  )
+            Container(
+                child: Material(
+                  shape: CircleBorder(side: BorderSide(
+                    color: Colors.black, width: 1.0,style: BorderStyle.solid)
+                  ),
+                  elevation: 5.0,
+                  color: Color(0xff4B8B3B),
+                  child: MaterialButton(
+                    padding: EdgeInsets.fromLTRB(50.0, 50.0, 50.0, 50.0),
+                    onPressed: () async {
+                      final ConfirmAction action = await _asyncConfirmDialog(context);
+                    },
+                    child: Text("On",
+                        textAlign: TextAlign.center,
+                        style: style.copyWith(
+                            color: Colors.white, fontWeight: FontWeight.bold)),
+                  ),
                 )
-              )
             ),
             Container(
-                width: screenSize.width,
-                child: saveButton
+                child: Material(
+                  shape: CircleBorder(side: BorderSide(
+                    color: Colors.black, width: 1.0,style: BorderStyle.solid)
+                  ),
+                  elevation: 5.0,
+                  color: Color(0xffAB4B52),
+                  child: MaterialButton(
+                    padding: EdgeInsets.fromLTRB(50.0, 50.0, 50.0, 50.0),
+                    onPressed: () async {
+                      final ConfirmAction action = await _asyncConfirmDialog(context);
+                    },
+                    child: Text("Off",
+                        textAlign: TextAlign.center,
+                        style: style.copyWith(
+                            color: Colors.white, fontWeight: FontWeight.bold)),
+                  ),
+                )
             )
           ]
         ),
