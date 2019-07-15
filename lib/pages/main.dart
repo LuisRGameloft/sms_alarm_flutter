@@ -61,8 +61,6 @@ _savingData(String passwd, String telph) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setString('telph', telph);
   prefs.setString('passwd', passwd);
-  print(passwd);
-  print(telph);
   await new Future.delayed(const Duration(seconds: 1));
 }
 
@@ -100,7 +98,8 @@ class MainPageState extends State<MainPage> {
                 final ConfirmAction action = await _asyncConfirmDialog(context);
                 if (action == ConfirmAction.ACCEPT) {
                   _pr.show();
-                  await _savingData(_passwdController.text, _phoneController.text);    
+                  final String cleanPhone = _phoneController.text.replaceAll("-", "");
+                  await _savingData(_passwdController.text, cleanPhone);
                   _pr.hide();
                   Navigator.pushReplacement(
                     context,
