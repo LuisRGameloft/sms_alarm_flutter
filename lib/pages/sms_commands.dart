@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 
@@ -31,11 +32,45 @@ Future<ConfirmAction> _asyncConfirmDialog(BuildContext context) async {
   );
 }
 
+class DataValues {
+  String pw;
+  String tl;
+
+  DataValues({this.pw, this.tl});
+}
+
 class SmsCommandState extends State<SmsCommandPage> {
+  DataValues _values;
+  
+  Future<DataValues> _gettingValues() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String telephone = prefs.getString('telph');
+    String passwd = prefs.getString('passwd');
+    DataValues vals = DataValues(pw : passwd, tl: telephone);
+    return vals;
+  }
+
+  @override
+  void initState() {
+     // This is the proper place to make the async calls
+     // This way they only get called once
+
+     // During development, if you change this code,
+     // you will need to do a full restart instead of just a hot reload
+        
+     // You can't use async/await here,
+     // We can't mark this method as async because of the @override
+     _gettingValues().then((result) {
+         // If we need to rebuild the widget with the resulting data,
+         // make sure to use `setState`
+         setState(() {
+            _values = result;
+        });
+     });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.of(context).size / 2;
-    
     return Scaffold(
       appBar: AppBar(
         title: Text('Activate Alarm'),
