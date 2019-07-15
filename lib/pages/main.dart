@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:masked_text/masked_text.dart';
 import 'package:sms_alarm_flutter/effects/scale_transition.dart';
 import 'package:sms_alarm_flutter/pages/sms_commands.dart';
+import 'package:progress_dialog/progress_dialog.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 
@@ -34,11 +36,25 @@ Future<ConfirmAction> _asyncConfirmDialog(BuildContext context) async {
   );
 }
 
+_savingData(String passwd, String telph) async {
+  //SharedPreferences prefs = await SharedPreferences.getInstance();
+  //prefs.setString('telph', telph);
+  //prefs.setString('passwd', passwd);
+  
+  await new Future.delayed(const Duration(seconds: 1));
+}
+
 class MainPageState extends State<MainPage> {
+  ProgressDialog _pr;
+  
   @override
   Widget build(BuildContext context) {
+    _pr = ProgressDialog(context, ProgressDialogType.Download);
+    _pr.setMessage('Saving plase wait...');
+
     final Size screenSize = MediaQuery.of(context).size / 2;
-    final myController = TextEditingController();
+    final _phoneController = TextEditingController();
+    final _passwdController = TextEditingController();
 
     final saveButton = Material(
           elevation: 5.0,
@@ -49,8 +65,10 @@ class MainPageState extends State<MainPage> {
             padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
             onPressed: () async {
               final ConfirmAction action = await _asyncConfirmDialog(context);
-
               if (action == ConfirmAction.ACCEPT) {
+                  _pr.show();
+                  await _savingData(_passwdController.text, _phoneController.text);    
+                  _pr.hide();
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => SmsCommandPage()));
@@ -74,7 +92,7 @@ class MainPageState extends State<MainPage> {
             SizedBox (
               width: screenSize.width,
               child: MaskedTextField (
-                  maskedTextFieldController: myController,
+                  maskedTextFieldController: _phoneController,
                   mask: "(xxx) xxx-xxx-xx-xx",
                   maxLength: 19,
                   keyboardType: TextInputType.number,
@@ -91,6 +109,7 @@ class MainPageState extends State<MainPage> {
             SizedBox (
               width: screenSize.width,
               child: TextFormField(
+                controller : _passwdController,
                 obscureText: true, // Use secure text for passwords.
                 decoration: new InputDecoration(
                   hintText: 'Password',
