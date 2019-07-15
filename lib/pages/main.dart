@@ -13,7 +13,7 @@ Future<ConfirmAction> _asyncConfirmDialog(BuildContext context) async {
     barrierDismissible: false, // user must tap button for close dialog!
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text('Data is correct?'),
+        title: Text('Is data correct?'),
         content: const Text(
             'You can change this setting on options section.'),
         actions: <Widget>[
@@ -35,10 +35,34 @@ Future<ConfirmAction> _asyncConfirmDialog(BuildContext context) async {
   );
 }
 
+Future<ConfirmAction> _asyncWarningDialog(BuildContext context, String msg) async {
+  return showDialog<ConfirmAction>(
+    context: context,
+    barrierDismissible: false, // user must tap button for close dialog!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Error'),
+        content: Text(
+            msg),
+        actions: <Widget>[
+          FlatButton(
+            child: const Text('ACCEPT'),
+            onPressed: () {
+              Navigator.of(context).pop(ConfirmAction.ACCEPT);
+            },
+          )
+        ],
+      );
+    },
+  );
+}
+
 _savingData(String passwd, String telph) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   prefs.setString('telph', telph);
   prefs.setString('passwd', passwd);
+  print(passwd);
+  print(telph);
   await new Future.delayed(const Duration(seconds: 1));
 }
 
@@ -58,7 +82,7 @@ class MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     _pr = ProgressDialog(context, ProgressDialogType.Normal);
-    _pr.setMessage('Saving plase wait...');
+    _pr.setMessage('Saving please wait...');
 
     final Size screenSize = MediaQuery.of(context).size / 2;
     final saveButton = Material(
@@ -69,14 +93,19 @@ class MainPageState extends State<MainPage> {
             minWidth: MediaQuery.of(context).size.width,
             padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
             onPressed: () async {
-              final ConfirmAction action = await _asyncConfirmDialog(context);
-              if (action == ConfirmAction.ACCEPT) {
+              if (_passwdController.text.isEmpty || _phoneController.text.isEmpty) {
+                final String msg = _phoneController.text.isEmpty?"Telephone field is empty":"Password field is empty";
+                await _asyncWarningDialog(context, msg);
+              } else {
+                final ConfirmAction action = await _asyncConfirmDialog(context);
+                if (action == ConfirmAction.ACCEPT) {
                   _pr.show();
                   await _savingData(_passwdController.text, _phoneController.text);    
                   _pr.hide();
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => SmsCommandPage()));
+                }
               }
             },
             child: Text("Save",
