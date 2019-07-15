@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:masked_text/masked_text.dart';
-import 'package:sms_alarm_flutter/effects/scale_transition.dart';
 import 'package:sms_alarm_flutter/pages/sms_commands.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,10 +36,9 @@ Future<ConfirmAction> _asyncConfirmDialog(BuildContext context) async {
 }
 
 _savingData(String passwd, String telph) async {
-  //SharedPreferences prefs = await SharedPreferences.getInstance();
-  //prefs.setString('telph', telph);
-  //prefs.setString('passwd', passwd);
-  
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setString('telph', telph);
+  prefs.setString('passwd', passwd);
   await new Future.delayed(const Duration(seconds: 1));
 }
 
