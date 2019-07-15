@@ -47,7 +47,7 @@ class MainPageState extends State<MainPage> {
   
   @override
   Widget build(BuildContext context) {
-    _pr = ProgressDialog(context, ProgressDialogType.Download);
+    _pr = ProgressDialog(context, ProgressDialogType.Normal);
     _pr.setMessage('Saving plase wait...');
 
     final Size screenSize = MediaQuery.of(context).size / 2;
@@ -56,11 +56,11 @@ class MainPageState extends State<MainPage> {
 
     final saveButton = Material(
           elevation: 5.0,
-          borderRadius: BorderRadius.circular(30.0),
+          borderRadius: BorderRadius.circular(32.0),
           color: Color(0xff01A0C7),
           child: MaterialButton(
             minWidth: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+            padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
             onPressed: () async {
               final ConfirmAction action = await _asyncConfirmDialog(context);
               if (action == ConfirmAction.ACCEPT) {
@@ -88,16 +88,15 @@ class MainPageState extends State<MainPage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children : <Widget> [ 
             SizedBox (
-              width: screenSize.width,
               child: MaskedTextField (
                   maskedTextFieldController: _phoneController,
-                  mask: "(xxx) xxx-xxx-xx-xx",
-                  maxLength: 19,
+                  mask: "xxx-xxx-xx-xx",
+                  maxLength: 13,
                   keyboardType: TextInputType.number,
                   inputDecoration: InputDecoration(
                       hintText: "Write you Telephone Number", 
                       labelText: "Telephone",
-                      contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                      contentPadding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
                       border: OutlineInputBorder (
                         borderRadius: BorderRadius.circular(32.0)
                       )
@@ -105,14 +104,13 @@ class MainPageState extends State<MainPage> {
               ),
             ),
             SizedBox (
-              width: screenSize.width,
               child: TextFormField(
                 controller : _passwdController,
                 obscureText: true, // Use secure text for passwords.
                 decoration: new InputDecoration(
                   hintText: 'Password',
                   labelText: 'Enter your password',
-                  contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                  contentPadding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(32.0)
                   )
