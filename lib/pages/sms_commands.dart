@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_sms/flutter_sms.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
 TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 
@@ -40,6 +43,7 @@ class DataValues {
 }
 
 class SmsCommandState extends State<SmsCommandPage> {
+  ProgressDialog _pr;
   DataValues _values;
   
   Future<DataValues> _gettingValues() async {
@@ -69,8 +73,26 @@ class SmsCommandState extends State<SmsCommandPage> {
      });
   }
 
+  void _sendSMS(String message, List<String> recipents) async {
+    try {  
+      final result = await FlutterSms.canSendSMS();
+      if(result) {
+        await FlutterSms
+          .sendSMS(message: message, recipients: recipents)
+          .catchError((onError) {
+              print(onError);
+          });
+      }
+    } on PlatformException { } 
+    catch (e) { }
+    //await new Future.delayed(const Duration(seconds: 1));
+  }
+
   @override
   Widget build(BuildContext context) {
+    _pr = ProgressDialog(context, ProgressDialogType.Normal);
+    _pr.setMessage('Sending message wait...');
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Activate Alarm'),
@@ -89,7 +111,9 @@ class SmsCommandState extends State<SmsCommandPage> {
                   child: MaterialButton(
                     padding: EdgeInsets.fromLTRB(50.0, 50.0, 50.0, 50.0),
                     onPressed: () async {
-                      final ConfirmAction action = await _asyncConfirmDialog(context);
+                      _pr.show();
+                      await _sendSMS("Here is a test Message", [""]);
+                      _pr.hide();
                     },
                     child: Text("On",
                         textAlign: TextAlign.center,
@@ -108,7 +132,9 @@ class SmsCommandState extends State<SmsCommandPage> {
                   child: MaterialButton(
                     padding: EdgeInsets.fromLTRB(50.0, 50.0, 50.0, 50.0),
                     onPressed: () async {
-                      final ConfirmAction action = await _asyncConfirmDialog(context);
+                      _pr.show();
+                      await _sendSMS("Here is a test Message", [""]);
+                      _pr.hide();
                     },
                     child: Text("Off",
                         textAlign: TextAlign.center,
