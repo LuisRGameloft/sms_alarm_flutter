@@ -44,16 +44,23 @@ _savingData(String passwd, String telph) async {
 
 class MainPageState extends State<MainPage> {
   ProgressDialog _pr;
+  final _phoneController = TextEditingController();
+  final _passwdController = TextEditingController();
   
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    _phoneController.dispose();
+    _passwdController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     _pr = ProgressDialog(context, ProgressDialogType.Normal);
     _pr.setMessage('Saving plase wait...');
 
     final Size screenSize = MediaQuery.of(context).size / 2;
-    final _phoneController = TextEditingController();
-    final _passwdController = TextEditingController();
-
     final saveButton = Material(
           elevation: 5.0,
           borderRadius: BorderRadius.circular(32.0),
