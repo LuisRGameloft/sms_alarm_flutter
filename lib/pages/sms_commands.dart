@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_sms/flutter_sms.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:flutter_progress_button/flutter_progress_button.dart';
 
 TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 
@@ -43,7 +44,6 @@ class DataValues {
 }
 
 class SmsCommandState extends State<SmsCommandPage> {
-  ProgressDialog _pr;
   DataValues _values;
   
   Future<DataValues> _gettingValues() async {
@@ -73,7 +73,7 @@ class SmsCommandState extends State<SmsCommandPage> {
      });
   }
 
-  void _sendSMS(String message, List<String> recipents) async {
+  _sendSMS(String message, List<String> recipents) async {
     try {  
       final result = await FlutterSms.canSendSMS();
       if(result) {
@@ -85,14 +85,10 @@ class SmsCommandState extends State<SmsCommandPage> {
       }
     } on PlatformException { } 
     catch (e) { }
-    //await new Future.delayed(const Duration(seconds: 1));
   }
 
   @override
   Widget build(BuildContext context) {
-    _pr = ProgressDialog(context, ProgressDialogType.Normal);
-    _pr.setMessage('Sending message wait...');
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Activate Alarm'),
@@ -101,48 +97,44 @@ class SmsCommandState extends State<SmsCommandPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children : <Widget> [ 
-            Container(
-                child: Material(
-                  shape: CircleBorder(side: BorderSide(
-                    color: Colors.black, width: 1.0,style: BorderStyle.solid)
-                  ),
-                  elevation: 5.0,
-                  color: Color(0xff4B8B3B),
-                  child: MaterialButton(
-                    padding: EdgeInsets.fromLTRB(50.0, 50.0, 50.0, 50.0),
-                    onPressed: () async {
-                      _pr.show();
-                      await _sendSMS(_values.pw, [_values.tl]);
-                      _pr.hide();
-                    },
-                    child: Text("On",
-                        textAlign: TextAlign.center,
-                        style: style.copyWith(
-                            color: Colors.white, fontWeight: FontWeight.bold)),
-                  ),
-                )
+            Container (
+              height: 120,
+              width: 120,
+              child : ProgressButton(
+                animate:false,
+                color: Color(0xff4B8B3B),
+                borderRadius: 100,
+                defaultWidget: Text("On",
+                  textAlign: TextAlign.center,
+                  style: style.copyWith(
+                    color: Colors.white, fontWeight: FontWeight.bold)),
+                progressWidget: const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
+                ),
+                onPressed: () async {
+                  await _sendSMS(_values.pw, [_values.tl]);
+                },
+              )
             ),
-            Container(
-                child: Material(
-                  shape: CircleBorder(side: BorderSide(
-                    color: Colors.black, width: 1.0,style: BorderStyle.solid)
-                  ),
-                  elevation: 5.0,
-                  color: Color(0xffAB4B52),
-                  child: MaterialButton(
-                    padding: EdgeInsets.fromLTRB(50.0, 50.0, 50.0, 50.0),
-                    onPressed: () async {
-                      _pr.show();
-                      await _sendSMS("Here is a test Message", [""]);
-                      _pr.hide();
-                    },
-                    child: Text("Off",
-                        textAlign: TextAlign.center,
-                        style: style.copyWith(
-                            color: Colors.white, fontWeight: FontWeight.bold)),
-                  ),
-                )
-            )
+            Container (
+              height: 120,
+              width: 120,
+              child : ProgressButton(
+                animate:false,
+                color: Color(0xffAB4B52),
+                borderRadius: 100,
+                defaultWidget: Text("Off",
+                  textAlign: TextAlign.center,
+                  style: style.copyWith(
+                    color: Colors.white, fontWeight: FontWeight.bold)),
+                progressWidget: const CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
+                ),
+                onPressed: () async {
+                  await _sendSMS(_values.pw, [_values.tl]);
+                },
+              )
+            ),
           ]
         ),
       ),
