@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_sms/flutter_sms.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
 
 TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
