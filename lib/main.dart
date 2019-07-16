@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sms_alarm_flutter/pages/main.dart';
 import 'package:sms_alarm_flutter/pages/sms_commands.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+    .then((_) {
+      runApp(new MyApp());
+    });
+}
 
 Future<bool> _checkIfExistValues() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
