@@ -1,39 +1,10 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_sms/flutter_sms.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
 
 TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-
-enum ConfirmAction { CANCEL, ACCEPT }
-Future<ConfirmAction> _asyncConfirmDialog(BuildContext context) async {
-  return showDialog<ConfirmAction>(
-    context: context,
-    barrierDismissible: false, // user must tap button for close dialog!
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Data is correct?'),
-        content: const Text(
-            'You can change this setting on options section.'),
-        actions: <Widget>[
-          FlatButton(
-            child: const Text('CANCEL'),
-            onPressed: () {
-              Navigator.of(context).pop(ConfirmAction.CANCEL);
-            },
-          ),
-          FlatButton(
-            child: const Text('ACCEPT'),
-            onPressed: () {
-              Navigator.of(context).pop(ConfirmAction.ACCEPT);
-            },
-          )
-        ],
-      );
-    },
-  );
-}
 
 class DataValues {
   String pw;
@@ -43,8 +14,15 @@ class DataValues {
 }
 
 class SmsCommandState extends State<SmsCommandPage> {
+  static const platform = const MethodChannel('com.platforms/utils');
   DataValues _values;
   
+  Future<void> _sendSMS({String message, String phonenumber}) async {
+    try {
+      await platform.invokeMethod('p_SendSMS', {"message":message, "phone":phonenumber});
+    } on PlatformException catch (e) { }
+  }
+
   Future<DataValues> _gettingValues() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String telephone = prefs.getString('telph');
@@ -72,20 +50,6 @@ class SmsCommandState extends State<SmsCommandPage> {
      });
   }
 
-  _sendSMS(String message, List<String> recipents) async {
-    try {  
-      final result = await FlutterSms.canSendSMS();
-      if(result) {
-        await FlutterSms
-          .sendSMS(message: message, recipients: recipents)
-          .catchError((onError) {
-              print(onError);
-          });
-      }
-    } on PlatformException { } 
-    catch (e) { }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,7 +75,7 @@ class SmsCommandState extends State<SmsCommandPage> {
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
                 ),
                 onPressed: () async {
-                  await _sendSMS(_values.pw, [_values.tl]);
+                  await _sendSMS(message: _values.pw, phonenumber: _values.tl);
                 },
               )
             ),
@@ -130,7 +94,7 @@ class SmsCommandState extends State<SmsCommandPage> {
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
                 ),
                 onPressed: () async {
-                  await _sendSMS(_values.pw, [_values.tl]);
+                  await _sendSMS(message: _values.pw, phonenumber: _values.tl);
                 },
               )
             ),
