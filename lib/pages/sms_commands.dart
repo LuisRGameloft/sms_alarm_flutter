@@ -112,7 +112,7 @@ class SmsCommandState extends State<SmsCommandPage> {
                     padding: EdgeInsets.fromLTRB(50.0, 50.0, 50.0, 50.0),
                     onPressed: () async {
                       _pr.show();
-                      await _sendSMS("Here is a test Message", [""]);
+                      await _sendSMS(_values.pw, [_values.tl]);
                       _pr.hide();
                     },
                     child: Text("On",
