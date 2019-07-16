@@ -20,6 +20,8 @@ class SmsCommandState extends State<SmsCommandPage> {
   Future<void> _sendSMS({String message, String phonenumber}) async {
     try {
       await platform.invokeMethod('p_SendSMS', {"message":message, "phone":phonenumber});
+      // sleep 1 second for feedback
+      await Future.delayed(const Duration(seconds: 1), () => "1");
     } on PlatformException catch (e) { }
   }
 
