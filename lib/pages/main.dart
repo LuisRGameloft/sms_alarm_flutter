@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:masked_text/masked_text.dart';
 import 'package:sms_alarm_flutter/pages/sms_commands.dart';
-import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_progress_button/flutter_progress_button.dart';
 
 TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 
@@ -65,7 +65,6 @@ _savingData(String passwd, String telph) async {
 }
 
 class MainPageState extends State<MainPage> {
-  ProgressDialog _pr;
   final _phoneController = TextEditingController();
   final _passwdController = TextEditingController();
   
@@ -79,40 +78,41 @@ class MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    _pr = ProgressDialog(context, ProgressDialogType.Normal);
-    _pr.setMessage('Saving please wait...');
-
     final Size screenSize = MediaQuery.of(context).size / 2;
-    final saveButton = Material(
-          elevation: 5.0,
-          borderRadius: BorderRadius.circular(32.0),
-          color: Color(0xff01A0C7),
-          child: MaterialButton(
-            minWidth: MediaQuery.of(context).size.width,
-            padding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
-            onPressed: () async {
-              if (_passwdController.text.isEmpty || _phoneController.text.isEmpty) {
+    
+    final saveButton = ProgressButton(
+        color: Color(0xff01A0C7),
+        borderRadius: 32.0,
+        defaultWidget: Text("Save",
+                textAlign: TextAlign.center,
+                style: style.copyWith(
+                    color: Colors.white, fontWeight: FontWeight.bold)),
+        progressWidget: const CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
+        ),
+        onPressed: () async {
+          if (_passwdController.text.isEmpty || _phoneController.text.isEmpty) {
                 final String msg = _phoneController.text.isEmpty?"Telephone field is empty":"Password field is empty";
                 await _asyncWarningDialog(context, msg);
-              } else {
+          } else {
                 final ConfirmAction action = await _asyncConfirmDialog(context);
                 if (action == ConfirmAction.ACCEPT) {
-                  _pr.show();
                   final String cleanPhone = _phoneController.text.replaceAll("-", "");
                   await _savingData(_passwdController.text, cleanPhone);
-                  _pr.hide();
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => SmsCommandPage()));
                 }
-              }
-            },
-            child: Text("Save",
-                textAlign: TextAlign.center,
-                style: style.copyWith(
-                    color: Colors.white, fontWeight: FontWeight.bold)),
-          ),
-        );
+          }
+          return () {
+          // Optional returns is returning a function that can be called
+          // after the animation is stopped at the beginning.
+          // A best practice would be to do time-consuming task in [onPressed],
+          // and do page navigation in the returned function.
+          // So that user won't missed out the reverse animation.
+          };
+        },
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -154,8 +154,9 @@ class MainPageState extends State<MainPage> {
             ),
             Container(
                 width: screenSize.width,
+                height: 70,
                 child: saveButton
-            )
+            ),
           ]
         ),
       ),
