@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
+import 'package:sms_alarm_flutter/pages/main.dart';
 
 TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 
@@ -102,6 +103,17 @@ class SmsCommandState extends State<SmsCommandPage> {
             ),
           ]
         ),
+      ),
+      floatingActionButton: new FloatingActionButton(
+          onPressed: () {
+              Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MainPage()));
+          },
+          backgroundColor: Colors.red,
+          //if you set mini to true then it will make your floating button small
+          mini: false,
+          child: new Icon(Icons.build),
       ),
     );
   }
