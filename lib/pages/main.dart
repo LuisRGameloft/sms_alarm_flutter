@@ -68,6 +68,26 @@ class MainPageState extends State<MainPage> {
   final _phoneController = TextEditingController();
   final _passwdController = TextEditingController();
   
+  Future<bool> _exitApp(BuildContext context) {
+  return showDialog(
+        context: context,
+        child: new AlertDialog(
+          title: new Text('Do you want to exit this application?'),
+          actions: <Widget>[
+            new FlatButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: new Text('No'),
+            ),
+            new FlatButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: new Text('Yes'),
+            ),
+          ],
+        ),
+      ) ??
+      false;
+  }
+
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -114,53 +134,56 @@ class MainPageState extends State<MainPage> {
         },
     );
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Initializate data'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children : <Widget> [ 
-            SizedBox (
-              child: MaskedTextField (
-                  maskedTextFieldController: _phoneController,
-                  mask: "xxx-xxx-xx-xx",
-                  maxLength: 13,
-                  keyboardType: TextInputType.number,
-                  inputDecoration: InputDecoration(
-                      hintText: "Write you Telephone Number", 
-                      labelText: "Telephone",
-                      contentPadding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
-                      border: OutlineInputBorder (
-                        borderRadius: BorderRadius.circular(32.0)
-                      )
+    return new WillPopScope(
+        onWillPop: () => _exitApp(context),
+          child: new Scaffold(
+            appBar: AppBar(
+              title: Text('Initializate data'),
+            ),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children : <Widget> [ 
+                  SizedBox (
+                    child: MaskedTextField (
+                        maskedTextFieldController: _phoneController,
+                        mask: "xxx-xxx-xx-xx",
+                        maxLength: 13,
+                        keyboardType: TextInputType.number,
+                        inputDecoration: InputDecoration(
+                            hintText: "Write you Telephone Number", 
+                            labelText: "Telephone",
+                            contentPadding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
+                            border: OutlineInputBorder (
+                              borderRadius: BorderRadius.circular(32.0)
+                            )
+                        ),
+                    ),
                   ),
+                  SizedBox (
+                    child: TextFormField(
+                      controller : _passwdController,
+                      obscureText: true, // Use secure text for passwords.
+                      decoration: new InputDecoration(
+                        hintText: 'Password',
+                        labelText: 'Enter your password',
+                        contentPadding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(32.0)
+                        )
+                      )
+                    )
+                  ),
+                  Container(
+                      width: screenSize.width,
+                      height: 70,
+                      child: saveButton
+                  ),
+                ]
               ),
             ),
-            SizedBox (
-              child: TextFormField(
-                controller : _passwdController,
-                obscureText: true, // Use secure text for passwords.
-                decoration: new InputDecoration(
-                  hintText: 'Password',
-                  labelText: 'Enter your password',
-                  contentPadding: EdgeInsets.fromLTRB(20.0, 20.0, 20.0, 20.0),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(32.0)
-                  )
-                )
-              )
-            ),
-            Container(
-                width: screenSize.width,
-                height: 70,
-                child: saveButton
-            ),
-          ]
-        ),
-      ),
-    );
+          ),
+      );
   }
 }
 

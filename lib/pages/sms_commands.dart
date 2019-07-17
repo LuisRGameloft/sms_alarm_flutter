@@ -53,67 +53,90 @@ class SmsCommandState extends State<SmsCommandPage> {
      });
   }
 
+  Future<bool> _exitApp(BuildContext context) {
+  return showDialog(
+        context: context,
+        child: new AlertDialog(
+          title: new Text('Do you want to exit this application?'),
+          actions: <Widget>[
+            new FlatButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: new Text('No'),
+            ),
+            new FlatButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: new Text('Yes'),
+            ),
+          ],
+        ),
+      ) ??
+      false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Activate Alarm'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children : <Widget> [ 
-            Container (
-              height: 120,
-              width: 120,
-              child : ProgressButton(
-                animate:false,
-                color: Color(0xff4B8B3B),
-                borderRadius: 100,
-                defaultWidget: Text("On",
-                  textAlign: TextAlign.center,
-                  style: style.copyWith(
-                    color: Colors.white, fontWeight: FontWeight.bold)),
-                progressWidget: const CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
+    return new WillPopScope(
+        onWillPop: () => _exitApp(context),
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('Activate Alarm'),
+          ),
+          body: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children : <Widget> [ 
+                Container (
+                  height: 120,
+                  width: 120,
+                  child : ProgressButton(
+                    animate:false,
+                    color: Color(0xff4B8B3B),
+                    borderRadius: 100,
+                    defaultWidget: Text("On",
+                      textAlign: TextAlign.center,
+                      style: style.copyWith(
+                        color: Colors.white, fontWeight: FontWeight.bold)),
+                    progressWidget: const CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
+                    ),
+                    onPressed: () async {
+                      await _sendSMS(message: _values.pw, phonenumber: _values.tl);
+                    },
+                  )
                 ),
-                onPressed: () async {
-                  await _sendSMS(message: _values.pw, phonenumber: _values.tl);
-                },
-              )
-            ),
-            Container (
-              height: 120,
-              width: 120,
-              child : ProgressButton(
-                animate:false,
-                color: Color(0xffAB4B52),
-                borderRadius: 100,
-                defaultWidget: Text("Off",
-                  textAlign: TextAlign.center,
-                  style: style.copyWith(
-                    color: Colors.white, fontWeight: FontWeight.bold)),
-                progressWidget: const CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
+                Container (
+                  height: 120,
+                  width: 120,
+                  child : ProgressButton(
+                    animate:false,
+                    color: Color(0xffAB4B52),
+                    borderRadius: 100,
+                    defaultWidget: Text("Off",
+                      textAlign: TextAlign.center,
+                      style: style.copyWith(
+                        color: Colors.white, fontWeight: FontWeight.bold)),
+                    progressWidget: const CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
+                    ),
+                    onPressed: () async {
+                      await _sendSMS(message: _values.pw, phonenumber: _values.tl);
+                    },
+                  )
                 ),
-                onPressed: () async {
-                  await _sendSMS(message: _values.pw, phonenumber: _values.tl);
-                },
-              )
+              ]
             ),
-          ]
-        ),
-      ),
-      floatingActionButton: new FloatingActionButton(
-          onPressed: () {
-              Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MainPage()));
-          },
-          backgroundColor: Colors.red,
-          //if you set mini to true then it will make your floating button small
-          mini: false,
-          child: new Icon(Icons.build),
+          ),
+          floatingActionButton: new FloatingActionButton(
+              onPressed: () {
+                  Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MainPage()));
+              },
+              backgroundColor: Colors.red,
+              //if you set mini to true then it will make your floating button small
+              mini: false,
+              child: new Icon(Icons.build),
+          ),
       ),
     );
   }
