@@ -85,7 +85,8 @@ class SmsCommandState extends State<SmsCommandPage> {
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
                     ),
                     onPressed: () async {
-                      await SendSMS(message: _values.pw, phonenumber: _values.tl);
+                      String msg = _values.pw + "1#";
+                      await SendSMS(message: msg, phonenumber: _values.tl);
                     },
                   )
                 ),
@@ -105,7 +106,8 @@ class SmsCommandState extends State<SmsCommandPage> {
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
                     ),
                     onPressed: () async {
-                      await SendSMS(message: _values.pw, phonenumber: _values.tl);
+                      String msg = _values.pw + "0#";
+                      await SendSMS(message: msg, phonenumber: _values.tl);
                     },
                   )
                 ),
