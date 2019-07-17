@@ -11,14 +11,6 @@ void main() {
     });
 }
 
-Future<bool> _checkIfExistValues() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String telephone = prefs.getString('telph');
-  if (telephone == null) return false;
-  if (telephone.isEmpty) return false;
-  return true;
-}
-
 class MyApp extends StatefulWidget {
     @override
     MyAppstate createState() => MyAppstate();
@@ -27,6 +19,14 @@ class MyApp extends StatefulWidget {
 class MyAppstate extends State<MyApp> {
 
   var _result;
+  
+  Future<bool> CheckIfExistValues() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String telephone = prefs.getString('telph');
+    if (telephone == null) return false;
+    if (telephone.isEmpty) return false;
+    return true;
+  }
 
   @override
   void initState() {
@@ -38,7 +38,7 @@ class MyAppstate extends State<MyApp> {
         
      // You can't use async/await here,
      // We can't mark this method as async because of the @override
-     _checkIfExistValues().then((result) {
+     CheckIfExistValues().then((result) {
          // If we need to rebuild the widget with the resulting data,
          // make sure to use `setState`
          setState(() {
