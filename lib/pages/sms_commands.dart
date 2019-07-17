@@ -57,7 +57,7 @@ class SmsCommandState extends State<SmsCommandPage> {
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
-        onWillPop: () => ExitAppPopup(context)
+        onWillPop: () => ExitAppPopup(context),
         child: Scaffold(
           appBar: AppBar(
             title: Text('Activate Alarm'),
