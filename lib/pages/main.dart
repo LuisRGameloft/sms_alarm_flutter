@@ -3,6 +3,7 @@ import 'package:masked_text/masked_text.dart';
 import 'package:sms_alarm_flutter/pages/sms_commands.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
+import 'package:sms_alarm_flutter/common/utils.dart';
 
 TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 
@@ -68,26 +69,6 @@ class MainPageState extends State<MainPage> {
   final _phoneController = TextEditingController();
   final _passwdController = TextEditingController();
   
-  Future<bool> _exitApp(BuildContext context) {
-  return showDialog(
-        context: context,
-        child: new AlertDialog(
-          title: new Text('Do you want to exit this application?'),
-          actions: <Widget>[
-            new FlatButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: new Text('No'),
-            ),
-            new FlatButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: new Text('Yes'),
-            ),
-          ],
-        ),
-      ) ??
-      false;
-  }
-
   @override
   void dispose() {
     // Clean up the controller when the widget is disposed.
@@ -135,7 +116,7 @@ class MainPageState extends State<MainPage> {
     );
 
     return new WillPopScope(
-        onWillPop: () => _exitApp(context),
+        onWillPop: () => ExitAppPopup(context),
           child: new Scaffold(
             appBar: AppBar(
               title: Text('Initializate data'),

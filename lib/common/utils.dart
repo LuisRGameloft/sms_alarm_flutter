@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Future<bool> _exitAppPopup(BuildContext context) {
+Future<bool> ExitAppPopup(BuildContext context) {
   return showDialog(
         context: context,
         child: new AlertDialog(

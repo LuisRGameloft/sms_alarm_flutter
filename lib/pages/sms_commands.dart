@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
 import 'package:sms_alarm_flutter/pages/main.dart';
+import 'package:sms_alarm_flutter/common/utils.dart';
 
 TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 
@@ -53,30 +54,10 @@ class SmsCommandState extends State<SmsCommandPage> {
      });
   }
 
-  Future<bool> _exitApp(BuildContext context) {
-  return showDialog(
-        context: context,
-        child: new AlertDialog(
-          title: new Text('Do you want to exit this application?'),
-          actions: <Widget>[
-            new FlatButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: new Text('No'),
-            ),
-            new FlatButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: new Text('Yes'),
-            ),
-          ],
-        ),
-      ) ??
-      false;
-  }
-
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
-        onWillPop: () => _exitApp(context),
+        onWillPop: () => ExitAppPopup(context)
         child: Scaffold(
           appBar: AppBar(
             title: Text('Activate Alarm'),
