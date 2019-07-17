@@ -6,12 +6,15 @@ import 'package:flutter_progress_button/flutter_progress_button.dart';
 import 'package:sms_alarm_flutter/pages/main.dart';
 import 'package:sms_alarm_flutter/common/utils.dart';
 
-TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+class SmsCommandPage extends StatefulWidget{
+  @override 
+  SmsCommandState createState() => SmsCommandState();
+}
 
+TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
 class DataValues {
   String pw;
   String tl;
-
   DataValues({this.pw, this.tl});
 }
 
@@ -19,7 +22,7 @@ class SmsCommandState extends State<SmsCommandPage> {
   static const platform = const MethodChannel('com.platforms/utils');
   DataValues _values;
   
-  Future<void> _sendSMS({String message, String phonenumber}) async {
+  Future<void> SendSMS({String message, String phonenumber}) async {
     try {
       await platform.invokeMethod('p_SendSMS', {"message":message, "phone":phonenumber});
       // sleep 1 second for feedback
@@ -27,7 +30,7 @@ class SmsCommandState extends State<SmsCommandPage> {
     } on PlatformException catch (e) { }
   }
 
-  Future<DataValues> _gettingValues() async {
+  Future<DataValues> GettingValues() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String telephone = prefs.getString('telph');
     String passwd = prefs.getString('passwd');
@@ -45,7 +48,7 @@ class SmsCommandState extends State<SmsCommandPage> {
         
      // You can't use async/await here,
      // We can't mark this method as async because of the @override
-     _gettingValues().then((result) {
+     GettingValues().then((result) {
          // If we need to rebuild the widget with the resulting data,
          // make sure to use `setState`
          setState(() {
@@ -57,8 +60,8 @@ class SmsCommandState extends State<SmsCommandPage> {
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
-        onWillPop: () => ExitAppPopup(context),
-        child: Scaffold(
+      onWillPop: () => ExitAppPopup(context),
+      child: Scaffold(
           appBar: AppBar(
             title: Text('Activate Alarm'),
           ),
@@ -76,12 +79,13 @@ class SmsCommandState extends State<SmsCommandPage> {
                     defaultWidget: Text("On",
                       textAlign: TextAlign.center,
                       style: style.copyWith(
-                        color: Colors.white, fontWeight: FontWeight.bold)),
+                        color: Colors.white, fontWeight: FontWeight.bold)
+                      ),
                     progressWidget: const CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
                     ),
                     onPressed: () async {
-                      await _sendSMS(message: _values.pw, phonenumber: _values.tl);
+                      await SendSMS(message: _values.pw, phonenumber: _values.tl);
                     },
                   )
                 ),
@@ -95,12 +99,13 @@ class SmsCommandState extends State<SmsCommandPage> {
                     defaultWidget: Text("Off",
                       textAlign: TextAlign.center,
                       style: style.copyWith(
-                        color: Colors.white, fontWeight: FontWeight.bold)),
+                        color: Colors.white, fontWeight: FontWeight.bold)
+                    ),
                     progressWidget: const CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
                     ),
                     onPressed: () async {
-                      await _sendSMS(message: _values.pw, phonenumber: _values.tl);
+                      await SendSMS(message: _values.pw, phonenumber: _values.tl);
                     },
                   )
                 ),
@@ -111,7 +116,8 @@ class SmsCommandState extends State<SmsCommandPage> {
               onPressed: () {
                   Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => MainPage()));
+                        MaterialPageRoute(builder: (context) => MainPage())
+                  );
               },
               backgroundColor: Colors.red,
               //if you set mini to true then it will make your floating button small
@@ -123,7 +129,3 @@ class SmsCommandState extends State<SmsCommandPage> {
   }
 }
 
-class SmsCommandPage extends StatefulWidget{
-  @override 
-  SmsCommandState createState() => SmsCommandState();
-}
