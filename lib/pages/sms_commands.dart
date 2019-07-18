@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
 import 'package:sms_alarm_flutter/pages/main.dart';
 import 'package:sms_alarm_flutter/common/utils.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class SmsCommandPage extends StatefulWidget{
   @override 
@@ -86,6 +87,15 @@ class SmsCommandState extends State<SmsCommandPage> {
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
                     ),
                     onPressed: () async {
+                      // Check permission  
+                      PermissionStatus permission = await PermissionHandler().checkPermissionStatus(PermissionGroup.sms);
+                      if (permission != PermissionStatus.granted) {
+                        // Try to access its permission
+                        Map<PermissionGroup, PermissionStatus> getPermissions = await PermissionHandler().requestPermissions([PermissionGroup.sms]);
+                        if (getPermissions[PermissionGroup.sms] != PermissionStatus.granted) {
+                            return;
+                        }
+                      } 
                       String msg = _values.pw + "1#";
                       await sendSMS(message: msg, phonenumber: _values.tl);
                     },
@@ -107,6 +117,15 @@ class SmsCommandState extends State<SmsCommandPage> {
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
                     ),
                     onPressed: () async {
+                      // Check permission  
+                      PermissionStatus permission = await PermissionHandler().checkPermissionStatus(PermissionGroup.sms);
+                      if (permission != PermissionStatus.granted) {
+                        // Try to access its permission
+                        Map<PermissionGroup, PermissionStatus> getPermissions = await PermissionHandler().requestPermissions([PermissionGroup.sms]);
+                        if (getPermissions[PermissionGroup.sms] != PermissionStatus.granted) {
+                            return;
+                        }
+                      } 
                       String msg = _values.pw + "0#";
                       await sendSMS(message: msg, phonenumber: _values.tl);
                     },
