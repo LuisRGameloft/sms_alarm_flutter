@@ -16,14 +16,14 @@ class MainPageState extends State<MainPage> {
   final _phoneController = TextEditingController();
   final _passwdController = TextEditingController();
   
-  Future<void> SavingData(String passwd, String telph) async {
+  Future<void> savingData(String passwd, String telph) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('telph', telph);
     prefs.setString('passwd', passwd);
     await new Future.delayed(const Duration(seconds: 1));
   }
 
-  Future<ConfirmAction> ConfirmDialog(BuildContext context) async {
+  Future<ConfirmAction> confirmDialog(BuildContext context) async {
     return showDialog<ConfirmAction>(
       context: context,
       barrierDismissible: false, // user must tap button for close dialog!
@@ -51,7 +51,7 @@ class MainPageState extends State<MainPage> {
     );
   }
   
-  Future<ConfirmAction> WarningDialog(BuildContext context, String msg) async {
+  Future<ConfirmAction> warningDialog(BuildContext context, String msg) async {
     return showDialog<ConfirmAction>(
       context: context,
       barrierDismissible: false, // user must tap button for close dialog!
@@ -100,12 +100,12 @@ class MainPageState extends State<MainPage> {
         onPressed: () async {
           if (_passwdController.text.isEmpty || _phoneController.text.isEmpty) {
                 final String msg = _phoneController.text.isEmpty?"Telephone field is empty":"Password field is empty";
-                await WarningDialog(context, msg);
+                await warningDialog(context, msg);
           } else {
-                final ConfirmAction action = await ConfirmDialog(context);
+                final ConfirmAction action = await confirmDialog(context);
                 if (action == ConfirmAction.ACCEPT) {
                   final String cleanPhone = _phoneController.text.replaceAll("-", "");
-                  await SavingData(_passwdController.text, cleanPhone);
+                  await savingData(_passwdController.text, cleanPhone);
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (context) => SmsCommandPage()));
@@ -122,7 +122,7 @@ class MainPageState extends State<MainPage> {
     );
 
     return new WillPopScope(
-        onWillPop: () => ExitAppPopup(context),
+        onWillPop: () => exitAppPopup(context),
         child: new Scaffold(
             appBar: AppBar(
               title: Text('Initializate data'),

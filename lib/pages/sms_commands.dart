@@ -22,15 +22,15 @@ class SmsCommandState extends State<SmsCommandPage> {
   static const platform = const MethodChannel('com.platforms/utils');
   DataValues _values;
   
-  Future<void> SendSMS({String message, String phonenumber}) async {
+  Future<void> sendSMS({String message, String phonenumber}) async {
     try {
       await platform.invokeMethod('p_SendSMS', {"message":message, "phone":phonenumber});
       // sleep 1 second for feedback
       await Future.delayed(const Duration(seconds: 1), () => "1");
-    } on PlatformException catch (e) { }
+    } on PlatformException catch (e) { e.toString(); }
   }
 
-  Future<DataValues> GettingValues() async {
+  Future<DataValues> gettingValues() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String telephone = prefs.getString('telph');
     String passwd = prefs.getString('passwd');
@@ -40,6 +40,7 @@ class SmsCommandState extends State<SmsCommandPage> {
 
   @override
   void initState() {
+    super.initState();
      // This is the proper place to make the async calls
      // This way they only get called once
 
@@ -48,7 +49,7 @@ class SmsCommandState extends State<SmsCommandPage> {
         
      // You can't use async/await here,
      // We can't mark this method as async because of the @override
-     GettingValues().then((result) {
+     gettingValues().then((result) {
          // If we need to rebuild the widget with the resulting data,
          // make sure to use `setState`
          setState(() {
@@ -60,7 +61,7 @@ class SmsCommandState extends State<SmsCommandPage> {
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
-      onWillPop: () => ExitAppPopup(context),
+      onWillPop: () => exitAppPopup(context),
       child: Scaffold(
           appBar: AppBar(
             title: Text('Activate Alarm'),
@@ -86,7 +87,7 @@ class SmsCommandState extends State<SmsCommandPage> {
                     ),
                     onPressed: () async {
                       String msg = _values.pw + "1#";
-                      await SendSMS(message: msg, phonenumber: _values.tl);
+                      await sendSMS(message: msg, phonenumber: _values.tl);
                     },
                   )
                 ),
@@ -107,7 +108,7 @@ class SmsCommandState extends State<SmsCommandPage> {
                     ),
                     onPressed: () async {
                       String msg = _values.pw + "0#";
-                      await SendSMS(message: msg, phonenumber: _values.tl);
+                      await sendSMS(message: msg, phonenumber: _values.tl);
                     },
                   )
                 ),

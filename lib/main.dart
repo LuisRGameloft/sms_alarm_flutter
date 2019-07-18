@@ -20,7 +20,7 @@ class MyAppstate extends State<MyApp> {
 
   var _result;
   
-  Future<bool> CheckIfExistValues() async {
+  Future<bool> checkIfExistValues() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String telephone = prefs.getString('telph');
     if (telephone == null) return false;
@@ -30,6 +30,7 @@ class MyAppstate extends State<MyApp> {
 
   @override
   void initState() {
+    super.initState();
      // This is the proper place to make the async calls
      // This way they only get called once
 
@@ -38,7 +39,7 @@ class MyAppstate extends State<MyApp> {
         
      // You can't use async/await here,
      // We can't mark this method as async because of the @override
-     CheckIfExistValues().then((result) {
+     checkIfExistValues().then((result) {
          // If we need to rebuild the widget with the resulting data,
          // make sure to use `setState`
          setState(() {
