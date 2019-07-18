@@ -1,7 +1,6 @@
 package com.example.sms_alarm_flutter;
 
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.telephony.SmsManager;
@@ -46,10 +45,10 @@ public class MainActivity extends FlutterActivity {
   }
 
   public boolean isSmsPermissionGranted() {
-    return ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED;
+    return false;
   }
 
   public void requestSmsPermission() {
-    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 100);
+    //ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 100);
   }
 }
