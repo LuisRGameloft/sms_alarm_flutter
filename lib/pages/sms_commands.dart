@@ -98,6 +98,7 @@ class SmsCommandState extends State<SmsCommandPage> {
                       } 
                       String msg = _values.pw + "1#";
                       await sendSMS(message: msg, phonenumber: _values.tl);
+                      await Future.delayed(const Duration(seconds: 1), () => "1");
                     },
                   )
                 ),
@@ -128,6 +129,7 @@ class SmsCommandState extends State<SmsCommandPage> {
                       } 
                       String msg = _values.pw + "0#";
                       await sendSMS(message: msg, phonenumber: _values.tl);
+                      await Future.delayed(const Duration(seconds: 1), () => "1");
                     },
                   )
                 ),
