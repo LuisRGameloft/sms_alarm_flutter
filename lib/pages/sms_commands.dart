@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_progress_button/flutter_progress_button.dart';
 import 'package:sms_alarm_flutter/pages/main.dart';
 import 'package:sms_alarm_flutter/common/utils.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:sms_maintained/sms.dart';
 
 class SmsCommandPage extends StatefulWidget{
   @override 
@@ -20,17 +19,8 @@ class DataValues {
 }
 
 class SmsCommandState extends State<SmsCommandPage> {
-  static const platform = const MethodChannel('com.platforms/utils');
   DataValues _values;
   
-  Future<void> sendSMS({String message, String phonenumber}) async {
-    try {
-      await platform.invokeMethod('p_SendSMS', {"message":message, "phone":phonenumber});
-      // sleep 1 second for feedback
-      await Future.delayed(const Duration(seconds: 1), () => "1");
-    } on PlatformException catch (e) { e.toString(); }
-  }
-
   Future<DataValues> gettingValues() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String telephone = prefs.getString('telph');
@@ -87,17 +77,18 @@ class SmsCommandState extends State<SmsCommandPage> {
                         valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
                     ),
                     onPressed: () async {
-                      // Check permission  
-                      PermissionStatus permission = await PermissionHandler().checkPermissionStatus(PermissionGroup.sms);
-                      if (permission != PermissionStatus.granted) {
-                        // Try to access its permission
-                        Map<PermissionGroup, PermissionStatus> getPermissions = await PermissionHandler().requestPermissions([PermissionGroup.sms]);
-                        if (getPermissions[PermissionGroup.sms] != PermissionStatus.granted) {
-                            return;
-                        }
-                      } 
                       String msg = _values.pw + "1#";
-                      await sendSMS(message: msg, phonenumber: _values.tl);
+                      //await sendSMS(message: msg, phonenumber: _values.tl);
+                      SmsSender sender = new SmsSender();
+                      SmsMessage message = new SmsMessage(_values.tl, 'Danchan!');
+                      message.onStateChanged.listen((state) {
+                        if (state == SmsMessageState.Sent) {
+                            print("SMS is sent!");
+                        } else if (state == SmsMessageState.Delivered) {
+                            print("SMS is delivered!");
+                        }
+                      });
+                      sender.sendSms(message);
                       await Future.delayed(const Duration(seconds: 1), () => "1");
                     },
                   )
@@ -118,17 +109,18 @@ class SmsCommandState extends State<SmsCommandPage> {
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white)
                     ),
                     onPressed: () async {
-                      // Check permission  
-                      PermissionStatus permission = await PermissionHandler().checkPermissionStatus(PermissionGroup.sms);
-                      if (permission != PermissionStatus.granted) {
-                        // Try to access its permission
-                        Map<PermissionGroup, PermissionStatus> getPermissions = await PermissionHandler().requestPermissions([PermissionGroup.sms]);
-                        if (getPermissions[PermissionGroup.sms] != PermissionStatus.granted) {
-                            return;
-                        }
-                      } 
                       String msg = _values.pw + "0#";
-                      await sendSMS(message: msg, phonenumber: _values.tl);
+                      //await sendSMS(message: msg, phonenumber: _values.tl);
+                      SmsSender sender = new SmsSender();
+                      SmsMessage message = new SmsMessage(_values.tl, 'Danchan!');
+                      message.onStateChanged.listen((state) {
+                        if (state == SmsMessageState.Sent) {
+                            print("SMS is sent!");
+                        } else if (state == SmsMessageState.Delivered) {
+                            print("SMS is delivered!");
+                        }
+                      });
+                      sender.sendSms(message);
                       await Future.delayed(const Duration(seconds: 1), () => "1");
                     },
                   )
