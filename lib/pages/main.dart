@@ -6,13 +6,25 @@ import 'package:flutter_progress_button/flutter_progress_button.dart';
 import 'package:sms_alarm_flutter/common/utils.dart';
 
 class MainPage extends StatefulWidget{
+  
+  final bool needsToReturn;
+
+  // Constructor
+  MainPage({Key key, this.needsToReturn}) : super(key: key);
+
   @override 
-  MainPageState createState() => MainPageState();
+  MainPageState createState() => MainPageState(needsToReturn: this.needsToReturn);
 }
 
 enum ConfirmAction { CANCEL, ACCEPT }
 
 class MainPageState extends State<MainPage> {
+
+  final bool needsToReturn;
+
+  // Constructor
+  MainPageState({this.needsToReturn});
+
   final _phoneController = TextEditingController();
   final _passwdController = TextEditingController();
   
@@ -121,9 +133,7 @@ class MainPageState extends State<MainPage> {
         },
     );
 
-    return new WillPopScope(
-        onWillPop: () => exitAppPopup(context),
-        child: new Scaffold(
+     var _mainWidget = Scaffold(
             appBar: AppBar(
               title: Text('Initializate data'),
             ),
@@ -169,8 +179,15 @@ class MainPageState extends State<MainPage> {
                 ]
               ),
             ),
-        ),
     );
+
+    if(!needsToReturn) {
+        return WillPopScope(
+          onWillPop: () => exitAppPopup(context),
+          child: _mainWidget
+        );
+    }
+    return _mainWidget;
   }
 }
 

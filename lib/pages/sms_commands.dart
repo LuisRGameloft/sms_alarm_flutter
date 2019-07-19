@@ -138,7 +138,7 @@ class SmsCommandState extends State<SmsCommandPage> {
               onPressed: () {
                   Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => MainPage())
+                        MaterialPageRoute(builder: (context) => MainPage(needsToReturn: true))
                   );
               },
               backgroundColor: Colors.red,

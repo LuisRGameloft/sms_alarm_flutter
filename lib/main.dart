@@ -51,7 +51,7 @@ class MyAppstate extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     // Check if there's exist prevusly telephone and password saved
-    Widget startWidget = MainPage();
+    Widget startWidget = MainPage(needsToReturn: false);
     if (_result == true) {
         startWidget = SmsCommandPage();
     }
