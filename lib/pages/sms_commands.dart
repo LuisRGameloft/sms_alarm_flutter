@@ -5,6 +5,7 @@ import 'package:flutter_progress_button/flutter_progress_button.dart';
 import 'package:sms_alarm_flutter/pages/main.dart';
 import 'package:sms_alarm_flutter/common/utils.dart';
 import 'package:sms_maintained/sms.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SmsCommandPage extends StatefulWidget{
   @override 
@@ -19,6 +20,9 @@ class DataValues {
 }
 
 class SmsCommandState extends State<SmsCommandPage> {
+
+  SmsSender _sender = SmsSender();
+
   DataValues _values;
   
   Future<DataValues> gettingValues() async {
@@ -79,16 +83,18 @@ class SmsCommandState extends State<SmsCommandPage> {
                     onPressed: () async {
                       String msg = _values.pw + "1#";
                       SmsMessage message = new SmsMessage(_values.tl, msg);
-                      message.onStateChanged.listen((SmsMessageState state) {
-                        if (state == SmsMessageState.Sent) {
-                            //print("SMS is sent!");
-                        } else if (state == SmsMessageState.Delivered) {
-                            //print("SMS is delivered!");
-                        }
-                      });
-                      SmsSender sender = new SmsSender();
-                      sender.sendSms(message);
-                      //await Future.delayed(const Duration(seconds: 1), () => "1");
+                      await _sender.sendSms(message);
+                      String toastMsg = "Message sent";
+                      Fluttertoast.showToast(
+                              msg: toastMsg,
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIos: 1,
+                              backgroundColor: Color(0xff4B8B3B),
+                              textColor: Colors.white,
+                              fontSize: 16.0
+                      );
+                      await Future.delayed(const Duration(milliseconds: 500), () => "1");
                     },
                   )
                 ),
@@ -110,16 +116,18 @@ class SmsCommandState extends State<SmsCommandPage> {
                     onPressed: () async {
                       String msg = _values.pw + "0#";
                       SmsMessage message = new SmsMessage(_values.tl, msg);
-                      message.onStateChanged.listen((SmsMessageState state) {
-                        if (state == SmsMessageState.Sent) {
-                            //print("SMS is sent!");
-                        } else if (state == SmsMessageState.Delivered) {
-                            //print("SMS is delivered!");
-                        }
-                      });
-                      SmsSender sender = new SmsSender();
-                      sender.sendSms(message);
-                      //await Future.delayed(const Duration(seconds: 1), () => "1");
+                      await _sender.sendSms(message);
+                      String toastMsg = "Message sent";
+                      Fluttertoast.showToast(
+                              msg: toastMsg,
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIos: 1,
+                              backgroundColor: Color(0xffAB4B52),
+                              textColor: Colors.white,
+                              fontSize: 16.0
+                      );
+                      await Future.delayed(const Duration(milliseconds: 500), () => "1");
                     },
                   )
                 ),

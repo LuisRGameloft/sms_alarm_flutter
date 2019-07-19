@@ -31,6 +31,8 @@ dependencies:
   sms_maintained:
     git:
         url: https://github.com/LuisRGameloft/flutter_sms.git
+        
+  fluttertoast: ^3.1.0
 
 dev_dependencies:
   flutter_test:
