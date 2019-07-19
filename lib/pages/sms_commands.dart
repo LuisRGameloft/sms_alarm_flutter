@@ -78,18 +78,17 @@ class SmsCommandState extends State<SmsCommandPage> {
                     ),
                     onPressed: () async {
                       String msg = _values.pw + "1#";
-                      //await sendSMS(message: msg, phonenumber: _values.tl);
-                      SmsSender sender = new SmsSender();
-                      SmsMessage message = new SmsMessage(_values.tl, 'Danchan!');
-                      message.onStateChanged.listen((state) {
+                      SmsMessage message = new SmsMessage(_values.tl, msg);
+                      message.onStateChanged.listen((SmsMessageState state) {
                         if (state == SmsMessageState.Sent) {
-                            print("SMS is sent!");
+                            //print("SMS is sent!");
                         } else if (state == SmsMessageState.Delivered) {
-                            print("SMS is delivered!");
+                            //print("SMS is delivered!");
                         }
                       });
+                      SmsSender sender = new SmsSender();
                       sender.sendSms(message);
-                      await Future.delayed(const Duration(seconds: 1), () => "1");
+                      //await Future.delayed(const Duration(seconds: 1), () => "1");
                     },
                   )
                 ),
@@ -110,18 +109,17 @@ class SmsCommandState extends State<SmsCommandPage> {
                     ),
                     onPressed: () async {
                       String msg = _values.pw + "0#";
-                      //await sendSMS(message: msg, phonenumber: _values.tl);
-                      SmsSender sender = new SmsSender();
-                      SmsMessage message = new SmsMessage(_values.tl, 'Danchan!');
-                      message.onStateChanged.listen((state) {
+                      SmsMessage message = new SmsMessage(_values.tl, msg);
+                      message.onStateChanged.listen((SmsMessageState state) {
                         if (state == SmsMessageState.Sent) {
-                            print("SMS is sent!");
+                            //print("SMS is sent!");
                         } else if (state == SmsMessageState.Delivered) {
-                            print("SMS is delivered!");
+                            //print("SMS is delivered!");
                         }
                       });
+                      SmsSender sender = new SmsSender();
                       sender.sendSms(message);
-                      await Future.delayed(const Duration(seconds: 1), () => "1");
+                      //await Future.delayed(const Duration(seconds: 1), () => "1");
                     },
                   )
                 ),

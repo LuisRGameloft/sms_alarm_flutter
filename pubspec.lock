@@ -88,13 +88,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
-  permission_handler:
-    dependency: "direct main"
-    description:
-      name: permission_handler
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.2.0"
   progress_dialog:
     dependency: "direct main"
     description:
@@ -121,6 +114,15 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
+  sms_maintained:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: HEAD
+      resolved-ref: "51c38d029036be36c61a9fba5cbca68e81cb417c"
+      url: "https://github.com/LuisRGameloft/flutter_sms.git"
+    source: git
+    version: "0.2.5"
   source_span:
     dependency: transitive
     description:
